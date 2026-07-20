@@ -1,0 +1,55 @@
+### Register User
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Tanuja Maske",
+    "email": "tanuja05@gmail.com",
+    "password": "123456"
+}
+
+### Login User
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "tanuja05@gmail.com",
+    "password": "123456"
+}
+
+### Add Product
+POST http://localhost:5000/api/products/add
+Content-Type: application/json
+
+{
+    "name": "Sugar",
+    "category": "Grocery",
+    "price": 50,
+    "quantity": 10,
+    "image": "sugar.jpg"
+}
+
+### Get All Products
+
+GET http://localhost:5000/api/products
+
+### Get Product By ID
+
+GET http://localhost:5000/api/products/6a54b2753241e904b7a665cd
+
+### Update Product
+
+PUT http://localhost:5000/api/products/6a54b2753241e904b7a665cd
+Content-Type: application/json
+
+{
+    "name": "Sugar Premium",
+    "category": "Grocery",
+    "price": 60,
+    "quantity": 15,
+    "image": "sugar-premium.jpg"
+}
+
+### Delete Product
+
+DELETE http://localhost:5000/api/products/6a54b2753241e904b7a665cd

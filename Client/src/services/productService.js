@@ -1,0 +1,52 @@
+import api from "./api";
+
+// ============================
+// Get All Products
+// ============================
+export const getProducts = async () => {
+  const response = await api.get("/products");
+  return response.data;
+};
+
+// ============================
+// Get Product By ID
+// ============================
+export const getProductById = async (id) => {
+  const response = await api.get(`/products/${id}`);
+  return response.data;
+};
+
+// ============================
+// Add Product
+// ============================
+export const addProduct = async (productData) => {
+  const response = await api.post("/products/add", productData);
+  return response.data;
+};
+
+// ============================
+// Update Product
+// ============================
+export const updateProduct = async (id, productData) => {
+  const response = await api.put(`/products/${id}`, productData);
+  return response.data;
+};
+
+// ============================
+// Delete Product
+// ============================
+export const deleteProduct = async (id) => {
+  const response = await api.delete(`/products/${id}`);
+  return response.data;
+};
+
+// ============================
+// Search Products
+// ============================
+export const searchProducts = async (keyword) => {
+  const response = await api.get(
+    `/products?search=${encodeURIComponent(keyword)}`
+  );
+
+  return response.data;
+};
