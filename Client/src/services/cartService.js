@@ -1,44 +1,38 @@
-import api from "./api";
+import api from './api'
 
-// ============================
-// Get User Cart
-// ============================
-export const getCart = async () => {
-  const response = await api.get("/cart");
-  return response.data;
-};
+export const cartService = {
+  // Get User Cart
+  getCart: async () => {
+    const response = await api.get('/cart')
+    return response.data
+  },
 
-// ============================
-// Add Item To Cart
-// ============================
-export const addToCart = async (productData) => {
-  const response = await api.post("/cart", productData);
-  return response.data;
-};
+  // Add Product To Cart
+  addToCart: async (productId, quantity = 1) => {
+    const response = await api.post('/cart', {
+      productId,
+      quantity,
+    })
+    return response.data
+  },
 
-// ============================
-// Update Cart Item Quantity
-// ============================
-export const updateCartItem = async (id, quantity) => {
-  const response = await api.put(`/cart/${id}`, {
-    quantity,
-  });
+  // ✅ Update Quantity
+  updateQuantity: async (cartItemId, quantity) => {
+    const response = await api.put(`/cart/${cartItemId}`, {
+      quantity,
+    })
+    return response.data
+  },
 
-  return response.data;
-};
+  // Remove Product From Cart
+  removeFromCart: async (cartItemId) => {
+    const response = await api.delete(`/cart/${cartItemId}`)
+    return response.data
+  },
 
-// ============================
-// Remove Item From Cart
-// ============================
-export const removeFromCart = async (id) => {
-  const response = await api.delete(`/cart/${id}`);
-  return response.data;
-};
-
-// ============================
-// Clear Cart
-// ============================
-export const clearCart = async () => {
-  const response = await api.delete("/cart");
-  return response.data;
-};
+  // Clear Cart
+  clearCart: async () => {
+    const response = await api.delete('/cart')
+    return response.data
+  },
+}

@@ -1,83 +1,62 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import { CartProvider } from './context/CartContext'
+import { WishlistProvider } from './context/WishlistContext'
+import { ProductProvider } from './context/ProductContext'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
+import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
+import ProductDetailsPage from './pages/ProductDetailsPage'
+import CartPage from './pages/CartPage'
+import WishlistPage from './pages/WishlistPage'
+import CheckoutPage from './pages/CheckoutPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import ProfilePage from './pages/ProfilePage'
+import Orders from './pages/Orders'
+import OrderDetails from "./pages/OrderDetails";
 
-// Layout
-import MainLayout from "./layouts/MainLayout";
-
-// Pages
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
-import Wishlist from "./pages/Wishlist";
-import Checkout from "./pages/Checkout";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-import Orders from "./pages/Orders";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+// ✅ ADD THESE 3 IMPORTS HERE
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <ProductProvider>
+            <div className="min-h-screen bg-gray-50 flex flex-col">
+              <Navbar />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/products" element={<ProductsPage />} />
+                  <Route path="/product/:id" element={<ProductDetailsPage />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/wishlist" element={<WishlistPage />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/orders/:id" element={<OrderDetails />} />
 
-        <Route path="/" element={<MainLayout />}>
-
-          <Route index element={<Home />} />
-
-          <Route path="products" element={<Products />} />
-
-          <Route
-            path="products/:id"
-            element={<ProductDetails />}
-          />
-
-          <Route path="cart" element={<Cart />} />
-
-          <Route path="wishlist" element={<Wishlist />} />
-
-          <Route
-            path="checkout"
-            element={<Checkout />}
-          />
-
-          <Route path="login" element={<Login />} />
-
-          <Route
-            path="register"
-            element={<Register />}
-          />
-
-          <Route
-            path="profile"
-            element={<Profile />}
-          />
-
-          <Route
-            path="orders"
-            element={<Orders />}
-          />
-
-          <Route path="about" element={<About />} />
-
-          <Route
-            path="contact"
-            element={<Contact />}
-          />
-
-        </Route>
-
-        {/* 404 Page */}
-        <Route
-          path="*"
-          element={<NotFound />}
-        />
-
-      </Routes>
-    </BrowserRouter>
-  );
+                  {/* ✅ ADD THESE 3 ROUTES HERE */}
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="*" element={<NotFoundPage />} />  {/* 404 catch-all */}
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </ProductProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
+  )
 }
 
-export default App;
+export default App

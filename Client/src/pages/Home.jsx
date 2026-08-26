@@ -55,12 +55,10 @@ const Home = () => {
 
           {categories.map((category) => (
 
-            <CategoryCard
-              key={category.id}
-              title={category.name}
-              image={category.image}
-            />
-
+          <CategoryCard
+  key={category.id}
+  category={category}
+/>
           ))}
 
         </div>

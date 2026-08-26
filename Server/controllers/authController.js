@@ -96,7 +96,64 @@ const loginUser = async (req, res) => {
   }
 };
 
+// =======================
+// ✅ NEW: Get Current User Profile
+// =======================
+const getCurrentUser = async (req, res) => {
+  try {
+    // req.user is set by the protect middleware
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// =======================
+// UPDATE USER PROFILE
+// =======================
+const updateUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    // Find user by ID from token
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Update fields
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    // Save updated user
+    await user.save();
+
+    // Return user without password
+    const updatedUser = await User.findById(req.user.id).select('-password');
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// =======================
+// Export All Controllers
+// =======================
 module.exports = {
   registerUser,
   loginUser,
+  getCurrentUser, // ✅ Add this
+  updateUser, // ✅ Add this
 };

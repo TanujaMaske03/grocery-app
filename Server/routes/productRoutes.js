@@ -6,6 +6,9 @@ const {
   getProductById,
   updateProduct,
   deleteProduct,
+  getFeaturedProducts,
+  getProductsByCategory,
+  searchProducts,
 } = require("../controllers/productController");
 
 const router = express.Router();
@@ -19,6 +22,21 @@ router.post("/add", addProduct);
 // Get All Products
 // ============================
 router.get("/", getProducts);
+
+// ============================
+// Get Featured Products
+// ============================
+router.get("/featured", getFeaturedProducts);
+
+// ============================
+// Get Products By Category
+// ============================
+router.get("/category/:category", getProductsByCategory);
+
+// ============================
+// Search Products
+// ============================
+router.get("/search", searchProducts);
 
 // ============================
 // Get Product By ID

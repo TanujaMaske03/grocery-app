@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "name": "Tanuja Maske",
-    "email": "tanuja05@gmail.com",
+    "email": "tanuja07@gmail.com",
     "password": "123456"
 }
 
@@ -13,7 +13,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "tanuja05@gmail.com",
+    "email": "tanuja07@gmail.com",
     "password": "123456"
 }
 
@@ -35,11 +35,11 @@ GET http://localhost:5000/api/products
 
 ### Get Product By ID
 
-GET http://localhost:5000/api/products/6a54b2753241e904b7a665cd
+GET http://localhost:5000/api/products/6a5edf9bf84fa610668bcabc
 
 ### Update Product
 
-PUT http://localhost:5000/api/products/6a54b2753241e904b7a665cd
+PUT http://localhost:5000/api/products/6a5edf9bf84fa610668bcabc
 Content-Type: application/json
 
 {
@@ -52,4 +52,96 @@ Content-Type: application/json
 
 ### Delete Product
 
-DELETE http://localhost:5000/api/products/6a54b2753241e904b7a665cd
+DELETE http://localhost:5000/api/products/6a5edf9bf84fa610668bcabc
+
+####################################################
+################## CART APIs #######################
+####################################################
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNWVkZWI5Zjg0ZmE2MTA2NjhiY2FiYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzg0NjA4NTk2LCJleHAiOjE3ODUyMTMzOTZ9.ZcPK7vpbcsl4XTx0Un6gPvwca0MoacUPKfMahCqR3_8
+
+### Get Cart
+GET http://localhost:5000/api/cart
+Authorization: Bearer {{token}}
+
+### Add To Cart
+POST http://localhost:5000/api/cart
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "productId": "6a5edcac376305f601b80df3",
+    "quantity": 2
+}
+
+### Remove From Cart
+DELETE http://localhost:5000/api/cart/PASTE_CART_ITEM_ID
+Authorization: Bearer {{token}}
+
+### Clear Cart
+DELETE http://localhost:5000/api/cart
+Authorization: Bearer {{token}}
+
+####################################################
+################ WISHLIST APIs #####################
+####################################################
+
+### Get Wishlist
+GET http://localhost:5000/api/wishlist
+Authorization: Bearer {{token}}
+
+### Add To Wishlist
+POST http://localhost:5000/api/wishlist
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "productId": "6a5edcac376305f601b80df3"
+}
+
+### Remove From Wishlist
+DELETE http://localhost:5000/api/wishlist/6a5edcac376305f601b80df3
+Authorization: Bearer {{token}}
+
+####################################################
+################## ORDER APIs ######################
+####################################################
+
+### Create Order
+
+POST http://localhost:5000/api/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "products": [
+        {
+            "product": "6a5edcac376305f601b80df3",
+            "quantity": 2,
+            "price": 50
+        }
+    ],
+    "totalAmount": 100,
+    "address": "Ashta, Maharashtra",
+    "paymentMethod": "COD"
+}
+
+### Get My Orders
+
+GET http://localhost:5000/api/orders
+Authorization: Bearer {{token}}
+
+### Get Single Order
+
+GET http://localhost:5000/api/orders/6a5f012efcb27c72da59ac1e
+Authorization: Bearer {{token}}
+
+### Update Order Status
+
+PUT http://localhost:5000/api/orders/6a5f012efcb27c72da59ac1e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "orderStatus":"Shipped"
+}

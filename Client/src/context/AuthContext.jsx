@@ -1,102 +1,66 @@
-import { createContext, useState } from "react";
-import api from "../services/api";
+import { createContext, useState, useEffect } from 'react'
+import { authService } from '../services/authService'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token") || null;
-  });
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token')
+      const storedUser = localStorage.getItem('user')
+      
+      if (token && storedUser) {
+        try {
+          const userData = await authService.getCurrentUser()
+          setUser(userData)
+          localStorage.setItem('user', JSON.stringify(userData))
+        } catch (error) {
+          console.error('Auth check failed:', error)
+          authService.logout()
+        }
+      }
+      setLoading(false)
+    }
 
-  const [loading, setLoading] = useState(false);
+    checkAuth()
+  }, [])
 
-  // =========================
-  // Register User
-  // =========================
+  const login = async (email, password) => {
+    const { user } = await authService.login(email, password)
+    setUser(user)
+    return user
+  }
+
   const register = async (userData) => {
-    try {
-      setLoading(true);
+    const { user } = await authService.register(userData)
+    setUser(user)
+    return user
+  }
 
-      const res = await api.post("/auth/register", userData);
-
-      return res.data;
-    } catch (error) {
-      const message =
-        error.response?.data?.message || "Registration Failed";
-
-      throw new Error(message, {
-        cause: error,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // =========================
-  // Login User
-  // =========================
-  const login = async (loginData) => {
-    try {
-      setLoading(true);
-
-      const res = await api.post("/auth/login", loginData);
-
-      const data = res.data;
-
-      setUser(data.user);
-      setToken(data.token);
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
-
-      localStorage.setItem(
-        "token",
-        data.token
-      );
-
-      return data;
-    } catch (error) {
-      const message =
-        error.response?.data?.message || "Login Failed";
-
-      throw new Error(message, {
-        cause: error,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // =========================
-  // Logout User
-  // =========================
   const logout = () => {
-    setUser(null);
-    setToken(null);
+    authService.logout()
+    setUser(null)
+  }
 
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-  };
+  const updateUser = async (userData) => {
+    const updatedUser = await authService.updateProfile(userData)
+    setUser(updatedUser)
+    return updatedUser
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        loading,
-        register,
-        login,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      updateUser
+    }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
