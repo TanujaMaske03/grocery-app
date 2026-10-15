@@ -2,11 +2,21 @@ import { useState } from 'react'
 import { 
   ChevronDownIcon, 
   ChevronUpIcon,
-  XMarkIcon 
+  XMarkIcon,
+  TagIcon
 } from '@heroicons/react/24/outline'
+import { 
+  CATEGORIES, 
+  PRICE_RANGES, 
+  RATINGS, 
+  DISCOUNT_OPTIONS, 
+  PROMOTIONS, 
+  normalizeCategory 
+} from '../../utils/filterUtils'
 
 const ProductFilters = ({ filters, onFilterChange, onClearFilters }) => {
   const [openSections, setOpenSections] = useState({
+    promotion: true,
     category: true,
     price: true,
     rating: true,
@@ -20,74 +30,140 @@ const ProductFilters = ({ filters, onFilterChange, onClearFilters }) => {
     }))
   }
 
-  const categories = [
-    'All',
-    'Fruits',
-    'Vegetables',
-    'Dairy',
-    'Bakery',
-    'Pantry',
-    'Beverages',
-    'Snacks',
-    'Breakfast',
-    'Health'
-  ]
+  const handleCategoryClick = (cat) => {
+    if (normalizeCategory(filters.category) === normalizeCategory(cat)) {
+      onFilterChange('category', 'All')
+    } else {
+      onFilterChange('category', cat)
+    }
+  }
 
-  const priceRanges = [
-    { label: 'Under ₹400', value: '0-400' },
-    { label: '₹400 - ₹800', value: '400-800' },
-    { label: '₹800 - ₹1600', value: '800-1600' },
-    { label: 'Above ₹1600', value: '1600-100000' }
-  ]
+  const handlePromotionClick = (promoId) => {
+    if (filters.promotion === promoId) {
+      onFilterChange('promotion', '')
+    } else {
+      onFilterChange('promotion', promoId)
+    }
+  }
 
-  const ratings = [5, 4, 3, 2, 1]
+  const handlePriceClick = (val) => {
+    if (filters.price === val) {
+      onFilterChange('price', '')
+    } else {
+      onFilterChange('price', val)
+    }
+  }
 
-  const discountOptions = [
-    { label: '10% and above', value: 10 },
-    { label: '20% and above', value: 20 },
-    { label: '30% and above', value: 30 },
-    { label: '50% and above', value: 50 }
-  ]
+  const handleRatingClick = (val) => {
+    if (Number(filters.rating) === val) {
+      onFilterChange('rating', 0)
+    } else {
+      onFilterChange('rating', val)
+    }
+  }
+
+  const handleDiscountClick = (val) => {
+    if (Number(filters.discount) === val) {
+      onFilterChange('discount', 0)
+    } else {
+      onFilterChange('discount', val)
+    }
+  }
+
+  const isCategorySelected = (cat) => {
+    return normalizeCategory(filters.category) === normalizeCategory(cat)
+  }
 
   return (
-    <div className="bg-white rounded-2xl shadow-soft p-6 sticky top-24">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-bold text-gray-800">Filters</h3>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-6 sticky top-24 transition-colors">
+      <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg font-bold text-gray-800 dark:text-white">Filters</h3>
         <button
           onClick={onClearFilters}
-          className="text-sm text-primary-600 hover:text-primary-700 flex items-center"
+          className="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 flex items-center transition-colors"
         >
           <XMarkIcon className="w-4 h-4 mr-1" />
           Clear All
         </button>
       </div>
 
+      {/* Promotions / Special Deals Section */}
+      <div className="mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+        <button
+          onClick={() => toggleSection('promotion')}
+          className="flex items-center justify-between w-full text-left font-semibold text-gray-800 dark:text-gray-200"
+        >
+          <span className="flex items-center">
+            <TagIcon className="w-4 h-4 mr-1.5 text-orange-500" />
+            Special Offers
+          </span>
+          {openSections.promotion ? (
+            <ChevronUpIcon className="w-5 h-5 text-gray-400" />
+          ) : (
+            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+          )}
+        </button>
+        {openSections.promotion && (
+          <div className="mt-3 space-y-2">
+            <label className="flex items-center cursor-pointer select-none">
+              <input
+                type="radio"
+                name="promotion"
+                checked={!filters.promotion}
+                onChange={() => onFilterChange('promotion', '')}
+                className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+              />
+              <span className="ml-2.5 text-sm text-gray-600 dark:text-gray-300">All Offers</span>
+            </label>
+            {Object.values(PROMOTIONS).map((promo) => (
+              <label key={promo.id} className="flex items-center cursor-pointer select-none">
+                <input
+                  type="radio"
+                  name="promotion"
+                  value={promo.id}
+                  checked={filters.promotion === promo.id}
+                  onClick={() => handlePromotionClick(promo.id)}
+                  onChange={() => {}}
+                  className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                />
+                <span className="ml-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center">
+                  {promo.label}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Category Filter */}
-      <div className="mb-6 border-b border-gray-100 pb-4">
+      <div className="mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
         <button
           onClick={() => toggleSection('category')}
-          className="flex items-center justify-between w-full text-left font-semibold text-gray-700"
+          className="flex items-center justify-between w-full text-left font-semibold text-gray-800 dark:text-gray-200"
         >
           Category
           {openSections.category ? (
-            <ChevronUpIcon className="w-5 h-5" />
+            <ChevronUpIcon className="w-5 h-5 text-gray-400" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5" />
+            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
           )}
         </button>
         {openSections.category && (
-          <div className="mt-3 space-y-2">
-            {categories.map((cat) => (
-              <label key={cat} className="flex items-center cursor-pointer">
+          <div className="mt-3 space-y-2 max-h-60 overflow-y-auto pr-1">
+            {CATEGORIES.map((cat) => (
+              <label key={cat} className="flex items-center cursor-pointer select-none">
                 <input
                   type="radio"
                   name="category"
                   value={cat}
-                  checked={filters.category === cat}
-                  onChange={(e) => onFilterChange('category', cat)}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  checked={isCategorySelected(cat)}
+                  onClick={() => handleCategoryClick(cat)}
+                  onChange={() => {}}
+                  className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
-                <span className="ml-2 text-sm text-gray-600">{cat}</span>
+                <span className={`ml-2.5 text-sm ${isCategorySelected(cat) ? 'font-semibold text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'}`}>
+                  {cat}
+                </span>
               </label>
             ))}
           </div>
@@ -95,31 +171,34 @@ const ProductFilters = ({ filters, onFilterChange, onClearFilters }) => {
       </div>
 
       {/* Price Range Filter */}
-      <div className="mb-6 border-b border-gray-100 pb-4">
+      <div className="mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
         <button
           onClick={() => toggleSection('price')}
-          className="flex items-center justify-between w-full text-left font-semibold text-gray-700"
+          className="flex items-center justify-between w-full text-left font-semibold text-gray-800 dark:text-gray-200"
         >
           Price Range
           {openSections.price ? (
-            <ChevronUpIcon className="w-5 h-5" />
+            <ChevronUpIcon className="w-5 h-5 text-gray-400" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5" />
+            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
           )}
         </button>
         {openSections.price && (
           <div className="mt-3 space-y-2">
-            {priceRanges.map((range) => (
-              <label key={range.value} className="flex items-center cursor-pointer">
+            {PRICE_RANGES.map((range) => (
+              <label key={range.label} className="flex items-center cursor-pointer select-none">
                 <input
                   type="radio"
                   name="price"
                   value={range.value}
                   checked={filters.price === range.value}
-                  onChange={(e) => onFilterChange('price', e.target.value)}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  onClick={() => handlePriceClick(range.value)}
+                  onChange={() => {}}
+                  className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
-                <span className="ml-2 text-sm text-gray-600">{range.label}</span>
+                <span className={`ml-2.5 text-sm ${filters.price === range.value ? 'font-semibold text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'}`}>
+                  {range.label}
+                </span>
               </label>
             ))}
           </div>
@@ -127,33 +206,44 @@ const ProductFilters = ({ filters, onFilterChange, onClearFilters }) => {
       </div>
 
       {/* Rating Filter */}
-      <div className="mb-6 border-b border-gray-100 pb-4">
+      <div className="mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
         <button
           onClick={() => toggleSection('rating')}
-          className="flex items-center justify-between w-full text-left font-semibold text-gray-700"
+          className="flex items-center justify-between w-full text-left font-semibold text-gray-800 dark:text-gray-200"
         >
           Rating
           {openSections.rating ? (
-            <ChevronUpIcon className="w-5 h-5" />
+            <ChevronUpIcon className="w-5 h-5 text-gray-400" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5" />
+            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
           )}
         </button>
         {openSections.rating && (
           <div className="mt-3 space-y-2">
-            {ratings.map((rating) => (
-              <label key={rating} className="flex items-center cursor-pointer">
+            {RATINGS.map((rateOption) => (
+              <label key={rateOption.label} className="flex items-center cursor-pointer select-none">
                 <input
                   type="radio"
                   name="rating"
-                  value={rating}
-                  checked={filters.rating === rating}
-                  onChange={(e) => onFilterChange('rating', Number(e.target.value))}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  value={rateOption.value}
+                  checked={Number(filters.rating) === rateOption.value}
+                  onClick={() => handleRatingClick(rateOption.value)}
+                  onChange={() => {}}
+                  className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
-                <span className="ml-2 text-sm text-gray-600 flex items-center">
-                  {'★'.repeat(rating)}
-                  <span className="text-gray-400 ml-1">& up</span>
+                <span className="ml-2.5 text-sm text-gray-600 dark:text-gray-300 flex items-center">
+                  {rateOption.value === 0 ? (
+                    <span className={Number(filters.rating) === 0 ? 'font-semibold text-primary-600 dark:text-primary-400' : ''}>
+                      All Ratings
+                    </span>
+                  ) : (
+                    <>
+                      <span className="text-amber-400 mr-1">{'★'.repeat(rateOption.value)}</span>
+                      <span className={Number(filters.rating) === rateOption.value ? 'font-semibold text-primary-600 dark:text-primary-400' : ''}>
+                        {rateOption.value === 5 ? 'only' : '& up'}
+                      </span>
+                    </>
+                  )}
                 </span>
               </label>
             ))}
@@ -165,28 +255,31 @@ const ProductFilters = ({ filters, onFilterChange, onClearFilters }) => {
       <div className="mb-2">
         <button
           onClick={() => toggleSection('discount')}
-          className="flex items-center justify-between w-full text-left font-semibold text-gray-700"
+          className="flex items-center justify-between w-full text-left font-semibold text-gray-800 dark:text-gray-200"
         >
           Discount
           {openSections.discount ? (
-            <ChevronUpIcon className="w-5 h-5" />
+            <ChevronUpIcon className="w-5 h-5 text-gray-400" />
           ) : (
-            <ChevronDownIcon className="w-5 h-5" />
+            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
           )}
         </button>
         {openSections.discount && (
           <div className="mt-3 space-y-2">
-            {discountOptions.map((option) => (
-              <label key={option.value} className="flex items-center cursor-pointer">
+            {DISCOUNT_OPTIONS.map((option) => (
+              <label key={option.label} className="flex items-center cursor-pointer select-none">
                 <input
                   type="radio"
                   name="discount"
                   value={option.value}
-                  checked={filters.discount === option.value}
-                  onChange={(e) => onFilterChange('discount', Number(e.target.value))}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  checked={Number(filters.discount) === option.value}
+                  onClick={() => handleDiscountClick(option.value)}
+                  onChange={() => {}}
+                  className="w-4 h-4 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
-                <span className="ml-2 text-sm text-gray-600">{option.label}</span>
+                <span className={`ml-2.5 text-sm ${Number(filters.discount) === option.value ? 'font-semibold text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'}`}>
+                  {option.label}
+                </span>
               </label>
             ))}
           </div>

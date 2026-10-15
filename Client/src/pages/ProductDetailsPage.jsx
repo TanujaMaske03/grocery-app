@@ -161,7 +161,9 @@ const ProductDetailsPage = () => {
 
             <div>
               <div className="flex items-center space-x-3 mb-3">
-                <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">{product.category}</span>
+                <Link to={`/products?category=${encodeURIComponent(product.category)}`} className="text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline">
+                  {product.category}
+                </Link>
                 {product.isNew && <span className="badge-new relative top-0 left-0">New</span>}
                 {discountPercentage > 0 && <span className="badge-discount relative top-0 right-0">-{discountPercentage}%</span>}
               </div>

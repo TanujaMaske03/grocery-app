@@ -65,9 +65,35 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    isSummerSale: {
+      type: Boolean,
+      default: false,
+    },
+
+    isOrganicWeek: {
+      type: Boolean,
+      default: false,
+    },
+
+    freeDelivery: {
+      type: Boolean,
+      default: false,
+    },
+
+    promotions: {
+      type: [String],
+      default: [],
+    },
+
+    tags: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
+    suppressReservedKeysWarning: true,
   }
 );
 

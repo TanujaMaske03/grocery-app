@@ -27,6 +27,11 @@ export const ProductProvider = ({ children }) => {
           isNew: p.isNew ?? false,
           isFeatured: p.isFeatured ?? false,
           isTrending: p.isTrending ?? false,
+          isSummerSale: Boolean(p.isSummerSale || p.promotions?.includes('summer-sale')),
+          isOrganicWeek: Boolean(p.isOrganicWeek || p.promotions?.includes('organic-week')),
+          freeDelivery: Boolean(p.freeDelivery || p.promotions?.includes('free-delivery')),
+          promotions: Array.isArray(p.promotions) ? p.promotions : [],
+          tags: Array.isArray(p.tags) ? p.tags : [],
         }))
         setProducts(normalized)
         setFeaturedProducts(normalized.filter(p => p.isFeatured))

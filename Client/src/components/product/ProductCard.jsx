@@ -103,6 +103,11 @@ const ProductCard = ({ product }) => {
           {stock > 0 && stock < 10 && (
             <span className="badge-stock">Only {stock} left</span>
           )}
+          {product.freeDelivery && (
+            <span className="absolute bottom-2 left-2 bg-blue-600/90 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+              <span>🚚</span> Free Delivery
+            </span>
+          )}
 
           {/* Hover Actions */}
           <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-3 transition-all duration-300 ${

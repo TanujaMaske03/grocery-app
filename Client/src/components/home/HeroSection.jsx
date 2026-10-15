@@ -22,7 +22,7 @@ const HeroSection = () => {
       subtitle: '100% Natural & Healthy',
       description: 'Choose from our wide range of organic groceries',
       buttonText: 'Explore Organic',
-      buttonLink: '/products?category=organic',
+      buttonLink: '/products?category=Organic%20Food',
       icon: '🌱',
       bgColor: 'from-green-500 via-emerald-600 to-teal-700',
     },
@@ -32,7 +32,7 @@ const HeroSection = () => {
       subtitle: 'Up to 50% Off',
       description: 'Grab the best deals on your favorite products',
       buttonText: 'View Deals',
-      buttonLink: '/products?deal=true',
+      buttonLink: '/products?promotion=summer-sale',
       icon: '🏷️',
       bgColor: 'from-orange-500 via-amber-600 to-red-600',
     }

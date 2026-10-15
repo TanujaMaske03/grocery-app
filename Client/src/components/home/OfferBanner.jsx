@@ -5,26 +5,26 @@ const OfferBanner = () => {
     {
       id: 1,
       title: 'Summer Sale!',
-      subtitle: 'Up to 50% off on fresh produce',
+      subtitle: 'Up to 50% off on fresh seasonal favorites',
       bgColor: 'from-orange-500 to-red-500',
       buttonText: 'Shop Now',
-      link: '/products?deal=true'
+      link: '/products?promotion=summer-sale'
     },
     {
       id: 2,
       title: 'Organic Week',
-      subtitle: '20% off on all organic products',
+      subtitle: 'Special curated offers on selected organic goods',
       bgColor: 'from-green-500 to-emerald-600',
       buttonText: 'Explore Organic',
-      link: '/products?category=organic'
+      link: '/products?promotion=organic-week'
     },
     {
       id: 3,
       title: 'Free Delivery',
-      subtitle: 'On orders above ₹4000',
+      subtitle: 'Available on eligible orders & selected items',
       bgColor: 'from-blue-500 to-indigo-600',
       buttonText: 'Order Now',
-      link: '/products'
+      link: '/products?promotion=free-delivery'
     }
   ]
 
@@ -36,7 +36,7 @@ const OfferBanner = () => {
             <Link
               key={offer.id}
               to={offer.link}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-r ${offer.bgColor} p-8 text-white shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1`}
+              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-r ${offer.bgColor} p-8 text-white shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1 block`}
             >
               <div className="relative z-10">
                 <h3 className="text-2xl font-bold mb-2">{offer.title}</h3>
